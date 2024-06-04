@@ -20,5 +20,5 @@ After installing library done for test and run project run this
 Go `../HotelCore/`
 RUN:
 
-python```python manage.py runserver```
+```python manage.py runserver```
 
