@@ -29,6 +29,7 @@ class Hotel(BaseModel):
 
 
     hotel_name = models.CharField(max_length=200, null=True, blank=True)
+    image = models.ImageField(blank=True, null=True, upload_to='Hotel/')
     location = models.ForeignKey(City, on_delete=models.CASCADE)
     stars = models.IntegerField(default=3, choices=PutStart.choices)
     price = models.IntegerField()
