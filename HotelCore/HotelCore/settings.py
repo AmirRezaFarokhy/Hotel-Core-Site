@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'UserProfile',
     'HotelService',
     'base',
+    'api',
 ]
 
 MIDDLEWARE = [
