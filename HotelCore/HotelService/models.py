@@ -33,6 +33,7 @@ class Hotel(BaseModel):
     location = models.ForeignKey(City, on_delete=models.CASCADE)
     stars = models.IntegerField(default=3, choices=PutStart.choices)
     price = models.IntegerField()
+    phone = models.IntegerField(default=0)
 
     def __str__(self):
         return f"{self.hotel_name} -- {self.stars}"
