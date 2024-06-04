@@ -15,7 +15,7 @@ class City(models.Model):
     address = models.TextField()
 
     def __str__(self) -> str:
-        return self.state + " -- " + self.city
+        return f"{self.state} -- {self.city}"
 
 
 class Hotel(BaseModel):
@@ -34,5 +34,6 @@ class Hotel(BaseModel):
     stars = models.IntegerField(default=3, choices=PutStart.choices)
     price = models.IntegerField()
 
-
+    def __str__(self):
+        return f"{self.hotel_name} -- {self.stars}"
 
