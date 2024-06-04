@@ -7,3 +7,9 @@ Hi there..
 pip install -r requirements.txt
 ```
 
+## User and Password for admin user
+
+username : `amir`
+password : `amir`
+
+
