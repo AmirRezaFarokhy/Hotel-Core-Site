@@ -36,5 +36,17 @@ class Hotel(BaseModel):
     phone = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.hotel_name} -- {self.stars}"
+        return f"{self.hotel_name} -- {self.stars} -- {self.id}"
+
+
+class DetailHotel(BaseModel):
+    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='hotel')
+    image_one = models.ImageField(blank=True, null=True, upload_to='details/')
+    image_two = models.ImageField(blank=True, null=True, upload_to='details/')
+    image_three = models.ImageField(blank=True, null=True, upload_to='details/')
+    image_four = models.ImageField(blank=True, null=True, upload_to='details/')
+    
+    def __str__(self):
+        return f"{self.hotel.hotel_name} -- {self.hotel.stars} -- detail"
+
 
