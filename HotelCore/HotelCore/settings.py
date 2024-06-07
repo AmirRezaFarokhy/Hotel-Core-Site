@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'HotelService',
     'base',
     'api',
-    'django-cors-headers',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -54,14 +54,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheasers.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware'
 ]
 
 ROOT_URLCONF = 'HotelCore.urls'
 CORS_URLS_REGEX = r"^/api/.*"
 CORS_ALLOWED_ORIGIN = [
     "http://127.0.0.1:5500"
-    
+
 ]
 
 TEMPLATES = [
