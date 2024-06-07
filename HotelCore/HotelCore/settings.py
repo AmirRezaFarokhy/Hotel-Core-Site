@@ -61,6 +61,7 @@ ROOT_URLCONF = 'HotelCore.urls'
 CORS_URLS_REGEX = r"^/api/.*"
 CORS_ALLOWED_ORIGIN = [
     "http://127.0.0.1:5500"
+    
 ]
 
 TEMPLATES = [
