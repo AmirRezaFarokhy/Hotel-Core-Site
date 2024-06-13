@@ -1,0 +1,54 @@
+services: 
+  web:
+    container_name: hotelcore
+    image: hotel_core
+    build: .
+    command: >
+            bash -c "python manage.py makemigrations &&
+                     python manage.py migrate &&
+                     python manage.py collectstatic &&
+                     gunicorn Presence_Absence.wsgi:application --bind 0.0.0.0:8000"
+    
+    volumes: 
+      - static_volume:/usr/src/app/staticfiles
+      - media_volume:/usr/src/app/mediafiles
+    ports:
+      - 8000:8000
+    environment:
+      - DEBUG=1
+      - DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+      - CELERY_BROKER=redis://127.0.0.1:6379
+    depends_on:
+      - db
+      - redis
+  redis:
+    image: redis:alpine
+    restart: unless-stopped
+    command: redis-server /usr/local/etc/redis/redis.conf
+    volumes:
+      - ./docker/redis/redis.conf:/usr/local/etc/redis/redis.conf
+    expose:
+      - 6379
+
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+
+  ngnix:
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/staticfiles
+    ports:
+      - 1337:8081
+    depends_on:
+      - web
+
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
+
