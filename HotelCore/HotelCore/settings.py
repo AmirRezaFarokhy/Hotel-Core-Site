@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'base',
     'api',
     'corsheaders',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -54,17 +55,14 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware'
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
-
-CORS_ALLOW_ALL_ORIGINS = True 
-CORS_ALLOW_CREDENTIALS = True
 ROOT_URLCONF = 'HotelCore.urls'
+
 CORS_URLS_REGEX = r"^/api/.*"
 CORS_ALLOWED_ORIGIN = [
     "http://127.0.0.1:5500"
-
 ]
 
 TEMPLATES = [
@@ -142,4 +140,6 @@ MEDIA_URL = '/media/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
