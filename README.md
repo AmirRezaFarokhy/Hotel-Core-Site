@@ -1,6 +1,8 @@
 # HotelBooking
 Hi there..
 
+# Guid For using in Admin page
+
 ## Step 0
 
 Go to `../HotelCore/` directory. 
@@ -17,19 +19,22 @@ then:
 ```python manage.py migrate```
 
 
-## Step 3
+## step 3
+``` python manage.py  createsupersuer```
+And then create your superuser
+
+
+## Step 4
 Up the project:
 
 ```python manage.py runserver 127.0.0.1:8000```
 
 
-
-## Step 4
+## Step 5
 
 URL : `127.0.0.1:8000/admin`
-username : `amir`
-password : `amir`
-
+usernmae : <YOUR_USERNAME>
+password : <YOUR_PASSWORD>
 
 ## Step 5
 Done :)
