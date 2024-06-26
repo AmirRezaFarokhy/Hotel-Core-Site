@@ -8,15 +8,15 @@ from django.contrib.auth.models import User
 class UserProfilesSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
-        user = UserProfiles.objects.create_user(
+        user = User.objects.create(
             username=validated_data['username'],
             password=validated_data['password'],
             first_name=validated_data['first_name']
         )
-        return super().create(validated_data)
+        return user 
 
     class Meta:
-        model = UserProfiles
+        model = User
         fields = ('id', 'username', 'password', 'first_name')
 
 

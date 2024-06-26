@@ -33,7 +33,7 @@ class DetailHotelAPIView(generics.RetrieveAPIView):
 class SignedUpAPIView(generics.CreateAPIView):
     serializer_class = UserProfilesSerializer
     permission_classes = [AllowAny]
-    queryset = UserProfiles.objects.all()
+    queryset = User.objects.all()
 
 
 class LogInAPIView(generics.ListCreateAPIView):
