@@ -2,7 +2,7 @@ from rest_framework import generics
 from rest_framework import status
 from HotelService.models import Hotel, DetailHotel
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from api.UserAPI.serializers import UserProfilesSerializer
+from api.UserAPI.serializers import UserSignUpSerializer, UserLogInSerializer
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from UserProfile.models import UserProfiles
@@ -17,7 +17,7 @@ from rest_framework import status
 
 
 class SignedUpAPIView(generics.CreateAPIView):
-    serializer_class = UserProfilesSerializer
+    serializer_class = UserSignUpSerializer
     permission_classes = [AllowAny]
     queryset = User.objects.all()
     authentication_classes = [SessionAuthentication, BasicAuthentication]
@@ -34,12 +34,25 @@ class SignedUpAPIView(generics.CreateAPIView):
 
     
 
-class LogInAPIView(generics.ListCreateAPIView):
+class LogInAPIView(generics.CreateAPIView):
+    serializer_class = UserLogInSerializer
     permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def create(self, request, *args, **kwargs):
+        user = authenticate(request, username=request.data.get('username'), 
+                            password=request.data.get('password'))
+        if user is not None:
+            login(request, user)
+            request.session['username'] = request.data.get('username')
+            request.session.save()
+            return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/api/hotel')
+    
 
 
 class DeleteAccountAPIView(generics.RetrieveDestroyAPIView):
-    serializer_class = UserProfilesSerializer
+    serializer_class = UserLogInSerializer
     permission_classes = [AllowAny]
     queryset = User.objects.all()
     authentication_classes = [SessionAuthentication, BasicAuthentication]
@@ -61,7 +74,7 @@ class DeleteAccountAPIView(generics.RetrieveDestroyAPIView):
 
 
 class LogOutAPIView(generics.RetrieveAPIView):
-    serializer_class = UserProfilesSerializer
+    serializer_class = UserLogInSerializer
     permission_classes = [AllowAny]
     queryset = User.objects.all()
     authentication_classes = [SessionAuthentication, BasicAuthentication]

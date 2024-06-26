@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
 
-class UserProfilesSerializer(serializers.ModelSerializer):
+class UserSignUpSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = make_password(validated_data['password'], salt=None, hasher='default')
@@ -23,4 +23,10 @@ class UserProfilesSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
 
-        
+
+class UserLogInSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = User 
+        fields = ('id', 'username', 'password', )
+        extra_kwargs = {'password': {'write_only': True}}
