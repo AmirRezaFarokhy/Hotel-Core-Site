@@ -15,6 +15,7 @@ from django.contrib.auth.models import User
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.http import HttpResponseRedirect
 from rest_framework.response import Response
+from django.contrib.auth import authenticate, login
 
 
 class HotelListAPIView(generics.ListAPIView):
@@ -23,15 +24,10 @@ class HotelListAPIView(generics.ListAPIView):
     permission_classes = [AllowAny]
     filter_backends = [filters.SearchFilter]
     search_fields = ['hotel_name']
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
 
-
-    def get(self, request, format=None):
-        print(request.user)
-        content = {
-            'user': str(request.user),
-            'auth': str(request.auth)
-        }
-        return Response(content)
+    def list(self, request, *args, **kwargs):
+        return super().list(request, *args, **kwargs)
 
 
 class DetailHotelAPIView(generics.RetrieveAPIView):
@@ -49,7 +45,13 @@ class SignedUpAPIView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         response = super().create(request, *args, **kwargs)
-        return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/api/hotel')
+        user = authenticate(request, username=request.data.get('username'), 
+                            password=request.data.get('password'))
+        if user is not None:
+            login(request, user)
+            request.session['username'] = request.data.get('username')
+            request.session.save()
+            return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/api/hotel')
 
     
 
