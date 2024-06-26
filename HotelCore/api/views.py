@@ -15,8 +15,9 @@ from django.contrib.auth.models import User
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 from django.http import HttpResponseRedirect
 from rest_framework.response import Response
-from django.contrib.auth import authenticate, login
-
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.sessions.models import Session
+from rest_framework import status
 
 class HotelListAPIView(generics.ListAPIView):
     serializer_class = HotelSerializer
@@ -34,6 +35,7 @@ class DetailHotelAPIView(generics.RetrieveAPIView):
     serializer_class = DetailHotelSerializer
     queryset = DetailHotel.objects.all()
     permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
     lookup_field = 'pk'
 
 
@@ -57,6 +59,39 @@ class SignedUpAPIView(generics.CreateAPIView):
 
 class LogInAPIView(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
+
+
+class DeleteAccountAPIView(generics.RetrieveDestroyAPIView):
+    serializer_class = UserProfilesSerializer
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+    lookup_field = 'pk'
+
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        Session.objects.filter(session_key=request.session.session_key).delete()
+        print(request.session['username'])
+        User.objects.filter(username=request.session['username']).delete()
+        return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/api/hotel')
+    
+    def get(self, request, *args, **kwargs):
+        userprofile = request.session['username']
+        response = {
+            "user": userprofile
+        }
+        return Response(response, status=status.HTTP_202_ACCEPTED)
+
+
+class LogOutAPIView(generics.RetrieveAPIView):
+    serializer_class = UserProfilesSerializer
+    permission_classes = [AllowAny]
+    queryset = User.objects.all()
+    authentication_classes = [SessionAuthentication, BasicAuthentication]
+
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return HttpResponseRedirect(redirect_to='http://127.0.0.1:8000/api/hotel')
 
 
 class UserProfileAPIView(generics.ListAPIView):
