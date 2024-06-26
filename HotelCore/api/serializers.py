@@ -1,6 +1,25 @@
 from HotelService.models import Hotel, City, DetailHotel
 from rest_framework import serializers
 from base.mixin import BaseDateMixin
+from UserProfile.models import UserProfiles
+from django.contrib.auth.models import User
+
+
+class UserProfilesSerializer(serializers.ModelSerializer):
+
+    def create(self, validated_data):
+        user = UserProfiles.objects.create_user(
+            username=validated_data['username'],
+            password=validated_data['password'],
+            first_name=validated_data['first_name']
+        )
+        return super().create(validated_data)
+
+    class Meta:
+        model = UserProfiles
+        fields = ('id', 'username', 'password', 'first_name')
+
+
 
 class LocationSerializer(serializers.ModelSerializer):
     
